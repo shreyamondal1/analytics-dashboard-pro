@@ -3,222 +3,463 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Business Analytics Dashboard</title>
-    
-    <!-- Bootstrap 5 CSS -->
+    <title>Analytics Dashboard Pro</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
-    <!-- Chart.js -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    
     <style>
         :root {
-            --bg-primary: #1a1d29;
-            --bg-secondary: #232738;
-            --bg-card: #2d3142;
-            --text-primary: #ffffff;
-            --text-secondary: #b8bcc8;
-            --accent-blue: #4e73df;
-            --accent-green: #1cc88a;
-            --accent-orange: #f6c23e;
-            --accent-red: #e74a3b;
-            --border-color: #3d4152;
+            --primary-color: #4f46e5;
+            --secondary-color: #06b6d4;
+            --success-color: #10b981;
+            --danger-color: #ef4444;
+            --warning-color: #f59e0b;
+            --dark-bg: #1f2937;
+            --light-bg: #f9fafb;
         }
 
         body {
-            background-color: var(--bg-primary);
-            color: var(--text-primary);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-        }
-
-        .navbar {
-            background-color: var(--bg-secondary) !important;
-            border-bottom: 2px solid var(--border-color);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-        }
-
-        .navbar-brand {
-            font-weight: 700;
-            font-size: 1.5rem;
-            color: var(--text-primary) !important;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px 0;
         }
 
         .dashboard-container {
-            padding: 2rem 0;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            margin: 0 auto;
+            max-width: 1400px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(79, 70, 229, 0.3);
+        }
+
+        .header h1 {
+            margin: 0;
+            font-weight: 700;
+            font-size: 2.5rem;
+        }
+
+        .header p {
+            margin: 10px 0 0 0;
+            opacity: 0.9;
+        }
+
+        .controls-section {
+            background: var(--light-bg);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border: 2px solid #e5e7eb;
+        }
+
+        .controls-section h5 {
+            color: var(--dark-bg);
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .date-input-group {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .date-input-wrapper {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .date-input-wrapper label {
+            display: block;
+            font-weight: 600;
+            color: var(--dark-bg);
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        .date-input-wrapper input {
+            width: 100%;
+            padding: 10px 15px;
+            border: 2px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .date-input-wrapper input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        .btn-custom {
+            padding: 10px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary-custom {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary-custom:hover {
+            background: #4338ca;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(79, 70, 229, 0.3);
+        }
+
+        .btn-success-custom {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .btn-success-custom:hover {
+            background: #059669;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-secondary-custom {
+            background: #6b7280;
+            color: white;
+        }
+
+        .btn-secondary-custom:hover {
+            background: #4b5563;
+            transform: translateY(-2px);
         }
 
         .kpi-card {
-            background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-secondary) 100%);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid;
+            transition: all 0.3s;
+            height: 100%;
         }
 
         .kpi-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .kpi-card.sales {
+            border-left-color: var(--primary-color);
+        }
+
+        .kpi-card.expenses {
+            border-left-color: var(--danger-color);
+        }
+
+        .kpi-card.profit {
+            border-left-color: var(--success-color);
+        }
+
+        .kpi-card.average {
+            border-left-color: var(--warning-color);
         }
 
         .kpi-icon {
             width: 50px;
             height: 50px;
-            border-radius: 10px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 1.5rem;
-            margin-bottom: 1rem;
+            margin-bottom: 15px;
         }
 
-        .kpi-icon.sales {
-            background: linear-gradient(135deg, var(--accent-blue), #3654c4);
+        .kpi-card.sales .kpi-icon {
+            background: rgba(79, 70, 229, 0.1);
+            color: var(--primary-color);
         }
 
-        .kpi-icon.profit {
-            background: linear-gradient(135deg, var(--accent-green), #17a673);
+        .kpi-card.expenses .kpi-icon {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger-color);
         }
 
-        .kpi-icon.margin {
-            background: linear-gradient(135deg, var(--accent-orange), #e0a800);
+        .kpi-card.profit .kpi-icon {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+        }
+
+        .kpi-card.average .kpi-icon {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning-color);
         }
 
         .kpi-label {
-            font-size: 0.875rem;
-            color: var(--text-secondary);
+            font-size: 0.9rem;
+            color: #6b7280;
+            font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            margin-bottom: 0.5rem;
         }
 
         .kpi-value {
             font-size: 2rem;
             font-weight: 700;
-            color: var(--text-primary);
-            margin: 0;
-        }
-
-        .chart-card {
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-        }
-
-        .chart-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            color: var(--text-primary);
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 0.75rem;
+            color: var(--dark-bg);
+            margin-top: 5px;
         }
 
         .chart-container {
-            position: relative;
-            height: 350px;
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            height: 400px;
         }
 
-        .loading {
+        .chart-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--dark-bg);
+            margin-bottom: 20px;
+        }
+
+        .export-section {
+            background: var(--light-bg);
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 30px;
+            border: 2px solid #e5e7eb;
+        }
+
+        .export-table-wrapper {
+            overflow-x: auto;
+            margin-top: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        #export-table {
+            width: 100%;
+            background: white;
+            border-collapse: collapse;
+        }
+
+        #export-table th {
+            background: var(--primary-color);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+
+        #export-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        #export-table tr:hover {
+            background: #f9fafb;
+        }
+
+        #export-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .no-data {
             text-align: center;
-            padding: 3rem;
-            color: var(--text-secondary);
+            padding: 40px;
+            color: #6b7280;
+            font-size: 1.1rem;
         }
 
-        .spinner-border {
-            width: 3rem;
-            height: 3rem;
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
         }
 
         @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
             .kpi-value {
                 font-size: 1.5rem;
             }
-            
+
             .chart-container {
                 height: 300px;
+            }
+
+            .date-input-group {
+                flex-direction: column;
+            }
+
+            .date-input-wrapper {
+                width: 100%;
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
     </style>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar navbar-dark">
-        <div class="container-fluid">
-            <span class="navbar-brand mb-0 h1">
-                📊 Business Analytics Dashboard
-            </span>
-        </div>
-    </nav>
-
-    <!-- Main Dashboard -->
-    <div class="container-fluid dashboard-container">
-        <div class="container">
-            <!-- Loading State -->
-            <div id="loading" class="loading">
-                <div class="spinner-border text-primary" role="status">
-                    <span class="visually-hidden">Loading...</span>
-                </div>
-                <p class="mt-3">Loading analytics data...</p>
+    <div class="container">
+        <div class="dashboard-container fade-in">
+            <!-- Header -->
+            <div class="header">
+                <h1><i class="bi bi-graph-up-arrow"></i> Analytics Dashboard Pro</h1>
+                <p>Real-time business intelligence and data visualization</p>
             </div>
 
-            <!-- Dashboard Content -->
-            <div id="dashboard-content" style="display: none;">
-                <!-- KPI Cards Row -->
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="kpi-card">
-                            <div class="kpi-icon sales">💰</div>
-                            <div class="kpi-label">Total Sales</div>
-                            <h2 class="kpi-value" id="total-sales">$0</h2>
-                        </div>
+            <!-- Controls Section -->
+            <div class="controls-section">
+                <h5><i class="bi bi-funnel"></i> Date Range Filter</h5>
+                <div class="date-input-group">
+                    <div class="date-input-wrapper">
+                        <label for="date-from">From Date</label>
+                        <input type="date" id="date-from" class="form-control">
                     </div>
-                    <div class="col-md-4">
-                        <div class="kpi-card">
-                            <div class="kpi-icon profit">📈</div>
-                            <div class="kpi-label">Total Profit</div>
-                            <h2 class="kpi-value" id="total-profit">$0</h2>
-                        </div>
+                    <div class="date-input-wrapper">
+                        <label for="date-to">To Date</label>
+                        <input type="date" id="date-to" class="form-control">
                     </div>
-                    <div class="col-md-4">
-                        <div class="kpi-card">
-                            <div class="kpi-icon margin">📊</div>
-                            <div class="kpi-label">Avg Profit Margin</div>
-                            <h2 class="kpi-value" id="avg-margin">0%</h2>
-                        </div>
+                    <div class="button-group" style="margin-top: 25px;">
+                        <button id="btn-reset" class="btn-custom btn-secondary-custom">
+                            <i class="bi bi-arrow-counterclockwise"></i> Reset
+                        </button>
+                        <button id="btn-export" class="btn-custom btn-success-custom">
+                            <i class="bi bi-download"></i> Export Report
+                        </button>
                     </div>
                 </div>
+            </div>
 
-                <!-- Charts Row -->
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="chart-card">
-                            <h3 class="chart-title">Sales Trend Over Time</h3>
-                            <div class="chart-container">
-                                <canvas id="sales-trend"></canvas>
-                            </div>
+            <!-- KPI Cards -->
+            <div class="row mb-4">
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="kpi-card sales">
+                        <div class="kpi-icon">
+                            <i class="bi bi-currency-dollar"></i>
                         </div>
+                        <div class="kpi-label">Total Sales</div>
+                        <div class="kpi-value" id="kpi-sales">$0</div>
                     </div>
-                    <div class="col-lg-6">
-                        <div class="chart-card">
-                            <h3 class="chart-title">Sales by Region</h3>
-                            <div class="chart-container">
-                                <canvas id="region-comparison"></canvas>
-                            </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="kpi-card expenses">
+                        <div class="kpi-icon">
+                            <i class="bi bi-wallet2"></i>
                         </div>
+                        <div class="kpi-label">Total Expenses</div>
+                        <div class="kpi-value" id="kpi-expenses">$0</div>
                     </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="kpi-card profit">
+                        <div class="kpi-icon">
+                            <i class="bi bi-graph-up"></i>
+                        </div>
+                        <div class="kpi-label">Total Profit</div>
+                        <div class="kpi-value" id="kpi-profit">$0</div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-3">
+                    <div class="kpi-card average">
+                        <div class="kpi-icon">
+                            <i class="bi bi-calculator"></i>
+                        </div>
+                        <div class="kpi-label">Avg Daily Sales</div>
+                        <div class="kpi-value" id="kpi-average">$0</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts -->
+            <div class="row">
+                <div class="col-lg-6 mb-4">
+                    <div class="chart-container">
+                        <div class="chart-title"><i class="bi bi-bar-chart-line"></i> Sales Trend</div>
+                        <canvas id="salesChart"></canvas>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4">
+                    <div class="chart-container">
+                        <div class="chart-title"><i class="bi bi-pie-chart"></i> Sales by Region</div>
+                        <canvas id="regionChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="chart-container">
+                        <div class="chart-title"><i class="bi bi-graph-up"></i> Financial Overview</div>
+                        <canvas id="financialChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Export Section -->
+            <div class="export-section">
+                <h5><i class="bi bi-table"></i> Filtered Data Summary</h5>
+                <div class="export-table-wrapper">
+                    <table id="export-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Sales</th>
+                                <th>Expenses</th>
+                                <th>Profit</th>
+                                <th>Region</th>
+                            </tr>
+                        </thead>
+                        <tbody id="export-table-body">
+                            <tr>
+                                <td colspan="5" class="no-data">No data available</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Embedded CSV Data
+        // CSV Data embedded
         const csvData = `Date,Sales,Expenses,Profit,Region
 2024-01-01,15000,8000,7000,North
 2024-01-02,18000,9000,9000,North
@@ -228,7 +469,7 @@
 2024-01-06,22000,12000,10000,North
 2024-01-07,19000,10000,9000,South`;
 
-        // Parse CSV function
+        // Parse CSV data
         function parseCSV(csv) {
             const lines = csv.trim().split('\n');
             const headers = lines[0].split(',');
@@ -238,6 +479,66 @@
                 const values = lines[i].split(',');
                 const row = {};
                 headers.forEach((header, index) => {
-                    const value = values[index];
-                    // Convert numeric values
-                    if (header
+                    row[header] = values[index];
+                });
+                data.push(row);
+            }
+
+            return data;
+        }
+
+        // Global data
+        let allData = parseCSV(csvData);
+        let filteredData = [...allData];
+
+        // Chart instances
+        let salesChart, regionChart, financialChart;
+
+        // Initialize date inputs
+        function initializeDateInputs() {
+            const dates = allData.map(d => new Date(d.Date));
+            const minDate = new Date(Math.min(...dates));
+            const maxDate = new Date(Math.max(...dates));
+
+            const dateFrom = document.getElementById('date-from');
+            const dateTo = document.getElementById('date-to');
+
+            dateFrom.value = minDate.toISOString().split('T')[0];
+            dateTo.value = maxDate.toISOString().split('T')[0];
+
+            dateFrom.min = minDate.toISOString().split('T')[0];
+            dateFrom.max = maxDate.toISOString().split('T')[0];
+            dateTo.min = minDate.toISOString().split('T')[0];
+            dateTo.max = maxDate.toISOString().split('T')[0];
+        }
+
+        // Filter data by date range
+        function filterDataByDateRange() {
+            const dateFrom = document.getElementById('date-from').value;
+            const dateTo = document.getElementById('date-to').value;
+
+            if (!dateFrom || !dateTo) {
+                filteredData = [...allData];
+                return;
+            }
+
+            const fromDate = new Date(dateFrom);
+            const toDate = new Date(dateTo);
+
+            filteredData = allData.filter(row => {
+                const rowDate = new Date(row.Date);
+                return rowDate >= fromDate && rowDate <= toDate;
+            });
+
+            updateDashboard();
+        }
+
+        // Update KPIs
+        function updateKPIs() {
+            const totalSales = filteredData.reduce((sum, row) => sum + parseFloat(row.Sales), 0);
+            const totalExpenses = filteredData.reduce((sum, row) => sum + parseFloat(row.Expenses), 0);
+            const totalProfit = filteredData.reduce((sum, row) => sum + parseFloat(row.Profit), 0);
+            const avgSales = filteredData.length > 0 ? totalSales / filteredData.length : 0;
+
+            document.getElementById('kpi-sales').textContent = `$${totalSales.toLocaleString()}`;
+            document.getElementById('kpi-expenses').textContent = `$${totalExpenses.toLocaleString()}`;
